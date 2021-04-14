@@ -35,9 +35,10 @@ Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO
 Adafruit_MQTT_Publish Temp = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/temperature");
 Adafruit_MQTT_Publish Hum = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/humidity");
 Adafruit_MQTT_Publish Press = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/pressure");
-Adafruit_MQTT_Publish AirQua = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/air");
+Adafruit_MQTT_Publish AirQua = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/air-quality");
 Adafruit_MQTT_Publish GPSlatlng = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/gpslatlng");
 Adafruit_MQTT_Publish Time = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/time");
+Adafruit_MQTT_Publish Alt = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/alt");
 
 
 
@@ -96,18 +97,16 @@ void loop() {
 
 
  void logBMEData(){
-     Serial.print("Temp= ");
-     Serial.println(bme.readTemperature());
-     Serial.print("Hum= ");
-     Serial.println(bme.readHumidity());
-     Serial.print("Approx. Altitude = ");
-    Serial.print(bme.readAltitude(SEALEVELPRESSURE_HPA));
-    Serial.println(" m");
-    Serial.print("Ground Altitude = ");
-    Serial.print(bme.readAltitude(SEALEVELPRESSURE_HPA)-423.0F);
-    Serial.println(" m");
-    Serial.print(bme.readPressure() / 100.0F);
-    Serial.println(" hPa");
+     
+     Temp.publish(bme.readTemperature());
+    
+     Hum.publish(bme.readHumidity());
+   
+    alt.publish(bme.readAltitude(SEALEVELPRESSURE_HPA));
+  
+   
+    Press.publish(bme.readPressure() / 100.0F);
+ 
   
    }
 

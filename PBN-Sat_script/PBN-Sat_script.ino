@@ -133,16 +133,45 @@ void loop() {
     while(true);
   }
    }
+
+   
    void displayGPS(){
     if (gps.location.isValid())
   {
-    Serial.print(gps.location.lat(), 6);
-    Serial.print(F(","));
-    Serial.print(gps.location.lng(), 6);
+   
+  float Distance_To_Home;                               // variable to store Distance to Home  
+  float GPSlat = (gps.location.lat());                  // variable to store latitude
+  float GPSlng = (gps.location.lng());                  // variable to store longitude
+  float GPSalt = (gps.altitude.feet());                 // variable to store altitude  
+  Distance_To_Home = (unsigned long)TinyGPSPlus::distanceBetween(gps.location.lat(),gps.location.lng(),HOME_LAT, HOME_LNG);
+  
+   char gpsbuffer[30];                         // Combine Latitude, Longitude, Altitude into a buffer of size X
+            char *p = gpsbuffer;                        // Create a buffer to store GPS information to upload to Adafruit IO                       
+
+            dtostrf(Distance_To_Home, 3, 4, p);         // Convert Distance to Home to a String Variable and add it to the buffer
+            p += strlen(p);
+            p[0] = ','; p++;                      
+            
+            dtostrf(GPSlat, 3, 6, p);                   // Convert GPSlat(latitude) to a String variable and add it to the buffer
+            p += strlen(p);
+            p[0] = ','; p++;
+                                                            
+            dtostrf(GPSlng, 3, 6, p);                   // Convert GPSlng(longitude) to a String variable and add it to the buffer
+            p += strlen(p);
+            p[0] = ','; p++;  
+                                                            
+            dtostrf(GPSalt, 2, 1, p);                   // Convert GPSalt(altimeter) to a String variable and add it to the buffer
+            p += strlen(p);
+                                                                        
+            p[0] = 0;                                   // null terminate, end of buffer array
+    if ((GPSlng != 0) && (GPSlat != 0))         // If GPS longitude or latitude do not equal zero then Publish
+              {
+              gpslatlng.publish(gpsbuffer);             // publish Combined Data to Adafruit IO
+              }
   }
   else
   {
-    Serial.print(F("INVALID"));
+    
   }
 
   Serial.print(F("  Date/Time: "));

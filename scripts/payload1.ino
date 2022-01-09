@@ -57,8 +57,6 @@ void loop() {
   dataString += String(bme.readAltitude(SEALEVELPRESSURE_HPA));
   dataString += ",";
   dataString += String(map(analogRead(A0),0,1023,0,500));
-  dataString += ",";
-  dataString += String(map(analogRead(A1),0,1023,0,500));
   dataString += "#";
   
    

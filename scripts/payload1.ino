@@ -58,12 +58,12 @@ void loop() {
   it++;
   id++;
   
-  if(id=1200){
+  if(id>=1200){
     dropmech.write(180);
     id=0;
     }else{dropmech.write(0);}
     
-  if(it=3){
+  if(it>=3){
    DateTime now = myRTC.now();
    dataString += String(now.year(), DEC);
    dataString += "/";

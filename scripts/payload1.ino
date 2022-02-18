@@ -21,7 +21,7 @@ void setup() {
   // put your setup code here, to run once:
   Wire.begin();
   Serial.begin(9600);
-  //
+  dht.begin();
   dropmech.attach(9);
   dropmech.write(0);
   
